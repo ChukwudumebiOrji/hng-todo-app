@@ -45,6 +45,8 @@ const renderTasks = () => {
     const checkbox = document.createElement("input")
     checkbox.type = "checkbox"
     checkbox.checked = task.isCompleted
+    checkbox.setAttribute("data-testid", "test-todo-complete-toggle")
+   
     checkbox.addEventListener("change", (e) =>
       changeStatus(task.id, e.target.checked),
     )
@@ -64,13 +66,16 @@ const renderTasks = () => {
 
     const title = document.createElement("h3")
     title.textContent = task.title
+    title.setAttribute("data-testid","test-todo-title")
     titleContainer.appendChild(title)
 
     const description = document.createElement("p")
     description.textContent = task.description
+    description.setAttribute("data-testid","test-todo-description")
 
     const deadline = document.createElement("time")
     deadline.innerHTML = getRemainingTime(task.deadline)
+    deadline.setAttribute("data-testid","test-todo-time-remaining")
 
     const intervalId = setInterval(() => {
       deadline.innerHTML = getRemainingTime(task.deadline)
@@ -78,9 +83,11 @@ const renderTasks = () => {
 
     const priority = document.createElement("p")
     priority.innerHTML = `Priority: <span id="priority">${task.priority}</span>`
+    priority.setAttribute("data-testid", "test-todo-priority")
 
     const status = document.createElement("p")
     status.textContent = `Status: ${task.isCompleted ? "Completed" : "Pending"}`
+    status.setAttribute("data-testid", "test-todo-status")
 
     const showDropdownButton = document.createElement("button")
     showDropdownButton.innerHTML = '<i class="fa-solid fa-chevron-down"></i>'
@@ -118,7 +125,7 @@ const renderTasks = () => {
 
     const editButton = document.createElement("button")
     editButton.innerHTML = '<i class="fa-solid fa-pen"></i>'
-    editButton.setAttribute("data-testid", "test-edit-button")
+    editButton.setAttribute("data-testid", "test-todo-edit-button")
     editButton.className = "todo-button"
     editButton.setAttribute("id", `edit-button-${task.id}`)
     editButton.ariaLabel = "Edit task"
@@ -128,7 +135,7 @@ const renderTasks = () => {
 
     const deleteButton = document.createElement("button")
     deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>'
-    deleteButton.setAttribute("data-testid", "test-delete-button")
+    deleteButton.setAttribute("data-testid", "test-todo-delete-button")
     deleteButton.className = "todo-button"
     deleteButton.setAttribute("id", `delete-button-${task.id}`)
     deleteButton.ariaLabel = "Delete task"
