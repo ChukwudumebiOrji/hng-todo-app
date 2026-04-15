@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HNG TODO</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section
+      class="todo-container"
+      role="region"
+      data-testid="test-todo-container"
+    >
+      <h2 data-testid="test-todo-title" class="todo-app-title">HNG TODO APP</h2>
+      <button class="todo-button" id="add-button">Add Task</button>
+      <!-- list of tasks -->
+      <div role="list" data-testid="test-todo-list" class="todo-list"></div>
+    </section>
+
+    <script src="index.js"></script>
+  </body>
+</html>
