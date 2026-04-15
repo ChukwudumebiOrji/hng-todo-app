@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
   margin: 0;
   padding: 0;
@@ -50,9 +50,10 @@ body {
 }
 
 .todo-actions {
-  margin-left: auto;
+  margin-left: 1em;
   display: flex;
-  gap: 10px;
+  gap: 1em;
+  flex-direction: row-reverse;
 }
 
 .todo-button {
@@ -72,13 +73,13 @@ body {
 .todo-title-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1em;
   width: 100%;
 }
 
 .checkbox-container {
   display: block;
-  margin: 0 10px 0 0;
+  margin: 1em 1em 1em 0;
 }
 
 #deadline-time {
@@ -95,6 +96,7 @@ body {
   color: #5d4037;
   cursor: pointer;
   border: none;
+  margin: 10px 0;
 }
 
 .todo-dropdown {
@@ -157,5 +159,9 @@ input[type="checkbox"]:focus-visible {
     padding: 20px;
     display: flex;
     align-items: center;
+  }
+
+  .todo-details {
+    flex-grow: 3;
   }
 }
