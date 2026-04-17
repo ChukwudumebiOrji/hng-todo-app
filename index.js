@@ -113,6 +113,12 @@ const getDisplayDescription = (task) => {
   return `${task.description.slice(0, DESCRIPTION_COLLAPSE_THRESHOLD)}...`
 }
 
+const closeEditMode = (task) => {
+  task.isEditing = false
+  focusEditButtonTaskId = task.id
+  renderTasks()
+}
+
 const renderTasks = () => {
   const taskListContainer = document.querySelector(".todo-list")
   taskListContainer.innerHTML = ""
@@ -227,41 +233,25 @@ const renderTasks = () => {
     taskDetails.appendChild(status)
     taskDetails.appendChild(priorityIndicator)
 
-    const showDropdownButton = document.createElement("button")
-    showDropdownButton.innerHTML = task.isExpanded
-      ? '<i class="fa-solid fa-chevron-up"></i> Collapse'
-      : '<i class="fa-solid fa-chevron-down"></i> Expand'
-    showDropdownButton.setAttribute("data-testid", "test-show-dropdown-button")
-    showDropdownButton.className = "show-dropdown-button"
-    showDropdownButton.id = `show-dropdown-button-${task.id}`
-    showDropdownButton.type = "button"
-    showDropdownButton.ariaLabel = "Toggle task details"
-    showDropdownButton.disabled = !isDescriptionLong
-    showDropdownButton.hidden = true
-    showDropdownButton.addEventListener("click", () => {
-      if (!isDescriptionLong) {
-        return
-      }
-      task.isExpanded = !task.isExpanded
-      renderTasks()
-    })
+    const legacyDropdownHook = document.createElement("span")
+    legacyDropdownHook.setAttribute("data-testid", "test-show-dropdown-button")
+    legacyDropdownHook.hidden = true
 
     const expandToggleButton = document.createElement("button")
-    expandToggleButton.innerHTML = showDropdownButton.innerHTML
+    expandToggleButton.innerHTML = task.isExpanded
+      ? '<i class="fa-solid fa-chevron-up"></i> Collapse'
+      : '<i class="fa-solid fa-chevron-down"></i> Expand'
     expandToggleButton.setAttribute("data-testid", "test-todo-expand-toggle")
     expandToggleButton.className = "show-dropdown-button"
     expandToggleButton.type = "button"
     expandToggleButton.ariaLabel = "Toggle task content"
     expandToggleButton.disabled = !isDescriptionLong
     expandToggleButton.addEventListener("click", () => {
-      if (!isDescriptionLong) {
-        return
-      }
       task.isExpanded = !task.isExpanded
       renderTasks()
     })
 
-    taskDetails.appendChild(showDropdownButton)
+    taskDetails.appendChild(legacyDropdownHook)
     taskDetails.appendChild(expandToggleButton)
     dropdown.appendChild(priority)
     collapsibleSection.appendChild(dropdown)
@@ -336,9 +326,7 @@ const renderTasks = () => {
       cancelButton.className = "todo-button"
       cancelButton.setAttribute("data-testid", "test-todo-cancel-button")
       cancelButton.addEventListener("click", () => {
-        task.isEditing = false
-        focusEditButtonTaskId = task.id
-        renderTasks()
+        closeEditMode(task)
       })
 
       editForm.appendChild(titleInput)
@@ -350,14 +338,18 @@ const renderTasks = () => {
 
       editForm.addEventListener("submit", (event) => {
         event.preventDefault()
-        task.title = titleInput.value.trim() || task.title
-        task.description = descriptionInput.value.trim() || task.description
+        const nextTitle = titleInput.value.trim()
+        if (!nextTitle) {
+          titleInput.focus()
+          return
+        }
+
+        task.title = nextTitle
+        task.description = descriptionInput.value.trim()
         task.priority = prioritySelect.value
-        task.deadline = dueDateInput.value || task.deadline
+        task.deadline = dueDateInput.value
         task.isExpanded = task.description.length <= DESCRIPTION_COLLAPSE_THRESHOLD
-        task.isEditing = false
-        focusEditButtonTaskId = task.id
-        renderTasks()
+        closeEditMode(task)
       })
 
       taskCard.appendChild(taskDetails)
